@@ -1,19 +1,12 @@
 import { Router } from "express";
-import { AppError } from "@/utils/app-error";
+import { ProductsController } from "@/controllers/product-controllers";
 
 const productRoutes = Router()
+const productsController = new ProductsController()
 
-productRoutes.get("/", (request, response) => {
-    const { query } = request   
+productRoutes.get("/", productsController.index)
 
-    response.json({message: "list", query})
-})
-
-productRoutes.post("/", (request, response) => {
-    const { username, id } = request.body
-
-    response.status(201).json({ username, id })
-})
+productRoutes.post("/", productsController.create)
 
 
 export { productRoutes }
