@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { knex } from "@/database/knex"; 
-import { z, ZodError } from "zod"
+import { AppError } from "@/utils/app-error";
+import { z } from "zod"
 
 export class ProductsController{
     async index (request: Request, response: Response, next: NextFunction){
@@ -49,9 +50,45 @@ export class ProductsController{
             .refine((value) => !isNaN(value), { message: "id must be a number"})
             .parse(request.params.id)
 
-            const product = await knex<ProductRepository>("products").where("id", id).update({ name, price, updated_at: knex.fn.now() })
+            const product = await knex<ProductRepository>("products")
+            .where({ id })
+            .first()
 
-            return response.json({ message: "Atualização realizada com sucesso" })
+            if (!product){
+                throw new AppError("Produto não encontrado")
+            }
+
+            await knex<ProductRepository>("products")
+            .where({ id })
+            .update({ name, price, updated_at: knex.fn.now() })
+
+            return response.json({ message: "Produto atualizado com sucesso" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async remove (request: Request, response: Response, next: NextFunction){
+        try {
+            const id = z
+            .string()
+            .transform(value => Number(value))
+            .refine((value) => !isNaN(value), { message: "id must be a number"})
+            .parse(request.params.id)
+
+            const product = await knex<ProductRepository>("products")
+            .where({ id })
+            .first()
+
+            if (!product){
+                throw new AppError("Produto não encontrado")
+            }
+
+            await knex<ProductRepository>("products")
+            .where({ id })
+            .del()
+
+            return response.json({ message: "Produto removido com sucesso" })
         } catch (error) {
             next(error)
         }
