@@ -19,6 +19,28 @@ export class ProductsController{
         }
     }
 
+    async show (request: Request, response: Response, next: NextFunction){
+        try {
+            const id = z
+            .string()
+            .transform(value => Number(value))
+            .refine(value => !isNaN(value), { message: "id must be a number" })
+            .parse(request.params.id)
+
+            const product = await knex<ProductRepository>("products")
+            .where({ id })
+            .first()
+
+            if (!product){
+                throw new AppError(`Product with id ${id} not found`)
+            }
+
+            return response.json({ product })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async create (request: Request, response: Response, next: NextFunction){
         try {
             const bodySchema = z.object({
@@ -81,7 +103,7 @@ export class ProductsController{
             .first()
 
             if (!product){
-                throw new AppError("Produto não encontrado")
+                throw new AppError(`Product with id ${id} not found`)
             }
 
             await knex<ProductRepository>("products")
