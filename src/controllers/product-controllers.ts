@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { knex } from "@/database/knex"; 
-import { AppError } from "@/utils/app-error";
-import { z } from "zod"
+import { knex } from "@/database/knex";       // Database
+import { AppError } from "@/utils/app-error"; // Client-side Errors
+import { z } from "zod"                       // Validation
 
 export class ProductsController{
     async index (request: Request, response: Response, next: NextFunction){

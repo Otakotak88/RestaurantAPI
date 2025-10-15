@@ -1,8 +1,7 @@
 import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
-    await knex("products").del();
-    await knex.raw('DELETE FROM sqlite_sequence WHERE name = "products"')
+    await knex("products").del()
 
     await knex("products").insert([
         { name:"Nhoque quatro queijos", price: 45 },
