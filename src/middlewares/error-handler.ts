@@ -11,6 +11,6 @@ export function errorHandler(error: any, request: Request, response: Response, _
         return response.status(400).json({ message: "Validation error", issues: error.format() })
     }
     
-    return response.status(500).json(error.message)
+    return response.status(500).json(error)
     
 }

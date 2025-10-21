@@ -41,7 +41,7 @@ export class OrdersController{
                 price: product.price
             })
 
-            return response.status(201).json("Pedido criado com sucesso")
+            return response.status(201).json({ message: "Pedido criado com sucesso" })
         } catch (error) {
             next(error)
         }

@@ -44,7 +44,7 @@ export class TablesSessionsController{
             await knex<TableSessionsRepository>("tables_sessions")
             .insert({ table_id })
 
-            return response.status(201).json("Mesa reservada com sucesso")
+            return response.status(201).json({ message: "Mesa reservada com sucesso" })
         } catch (error) {
             next(error)
         }

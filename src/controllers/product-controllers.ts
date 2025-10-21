@@ -35,7 +35,7 @@ export class ProductsController{
                 throw new AppError(`Product with id ${id} not found`)
             }
 
-            return response.json({ product })
+            return response.json( product )
         } catch (error) {
             next(error)
         }
@@ -52,7 +52,7 @@ export class ProductsController{
 
             await knex<ProductRepository>("products").insert({ name, price })
 
-            return response.status(201).json("deu serto")
+            return response.status(201).json({ message: "Produto criado com sucesso" })
         } catch (error) {
             next(error)
         }
@@ -107,8 +107,8 @@ export class ProductsController{
             }
 
             await knex<ProductRepository>("products")
-            .where({ id })
             .del()
+            .where({ id })
 
             return response.json({ message: "Produto removido com sucesso" })
         } catch (error) {
